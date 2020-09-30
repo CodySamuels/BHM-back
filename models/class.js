@@ -2,6 +2,9 @@
 // ===============================================
 module.exports = function (sequelize, DataTypes) {
 
+
+  // TABLE COLUMNS
+  // ===============================================
   const item = sequelize.define("item", {
     sku: DataTypes.STRING,
     prices_amountMax: DataTypes.DECIMAL,
@@ -29,16 +32,24 @@ module.exports = function (sequelize, DataTypes) {
     sourceURLS: DataTypes.TEXT,
     upc: DataTypes.TEXT,
     weight: DataTypes.TEXT
-  }, {
-    tableName: "items"
-  })
+  },
 
-  item.associate = function (models) {
-    item.belongsToMany(models.cart, {
-      through: "cartItems"
+
+    // TABLE NAME
+    // ===============================================
+    {
+      tableName: "items"
     })
+
+
+  // ASSOCIATIONS
+  // ===============================================
+  item.associate = (models) => {
+    item.belongsToMany(models.cart, { through: "cartItems" })
   };
 
+
+  // RETURN
+  // ===============================================
   return item;
 }
-

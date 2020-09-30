@@ -9,6 +9,9 @@ const bcrypt = require("bcrypt");
 module.exports = (sequelize, DataTypes) => {
   const user = sequelize.define("user", {
 
+
+    // TABLE COLUMNS
+    // ===============================================
     userId: {
       type: DataTypes.UUID,
       defaultValue: Sequelize.UUIDV4,

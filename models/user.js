@@ -1,5 +1,10 @@
+// DEPENDENCIES AND VARIABLES
+// ===============================================
 const bcrypt = require("bcrypt");
 
+
+// MODEL
+// ===============================================
 module.exports = function (sequelize, DataTypes) {
   const user = sequelize.define("user", {
 

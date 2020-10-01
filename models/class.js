@@ -42,7 +42,7 @@ module.exports = function (sequelize, DataTypes) {
   // ===============================================
   item.associate = (models) => {
     item.belongsToMany(models.cart, { through: "cartItems", onDelete: 'cascade' })
-    item.belongsToMany(models.user, { through: 'userClass', onDelete: 'cascade' })
+    item.belongsToMany(models.user, { through: 'userClassTable', onDelete: 'cascade' })
   };
 
 

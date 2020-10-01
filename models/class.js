@@ -1,3 +1,8 @@
+// DEPENDENCIES AND VARIABLES
+// ===============================================
+const Sequelize = require("sequelize");
+
+
 // MODEL
 // ===============================================
 module.exports = function (sequelize, DataTypes) {
@@ -6,46 +11,38 @@ module.exports = function (sequelize, DataTypes) {
   // TABLE COLUMNS
   // ===============================================
   const item = sequelize.define("item", {
-    sku: DataTypes.STRING,
-    prices_amountMax: DataTypes.DECIMAL,
-    prices_amountMin: DataTypes.DECIMAL,
-    prices_availability: DataTypes.TEXT,
-    prices_condition: DataTypes.TEXT,
-    prices_currency: DataTypes.TEXT,
-    prices_dateSeen: DataTypes.TEXT,
-    prices_isSale: DataTypes.TEXT,
-    prices_merchant: DataTypes.TEXT,
-    prices_shipping: DataTypes.TEXT,
-    prices_sourceURLs: DataTypes.TEXT,
-    asins: DataTypes.TEXT,
-    brand: DataTypes.TEXT,
-    categories: DataTypes.TEXT,
-    dateAdded: DataTypes.DATE,
-    dateUpdated: DataTypes.DATE,
-    ean: DataTypes.TEXT,
-    imageURLs: DataTypes.TEXT,
-    keys: DataTypes.TEXT,
-    manufacturer: DataTypes.TEXT,
-    manufacturerNumber: DataTypes.TEXT,
-    name: DataTypes.TEXT,
-    primaryCategories: DataTypes.TEXT,
-    sourceURLS: DataTypes.TEXT,
-    upc: DataTypes.TEXT,
-    weight: DataTypes.TEXT
+
+
+    // TABLE COLUMNS
+    // ===============================================
+    classId: {
+      type: DataTypes.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      primaryKey: true,
+      allowNull: false,
+    },
+
+    name: DataTypes.STRING,
+    price: DataTypes.DECIMAL,
+    inventory: DataTypes.STRING,
+    description: DataTypes.STRING,
+    instructor: DataTypes.STRING,
+    isActive: DataTypes.BOOLEAN,
   },
 
 
     // TABLE NAME
     // ===============================================
     {
-      tableName: "items"
+      tableName: "class"
     })
 
 
   // ASSOCIATIONS
   // ===============================================
   item.associate = (models) => {
-    item.belongsToMany(models.cart, { through: "cartItems" })
+    item.belongsToMany(models.cart, { through: "cartItems", onDelete: 'cascade' })
+    item.belongsToMany(models.user, { through: 'userClass', onDelete: 'cascade' })
   };
 
 

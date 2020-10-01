@@ -8,13 +8,8 @@ module.exports = function (sequelize, DataTypes) {
   // ASSOCIATIONS
   // ===============================================
   cart.associate = (models) => {
-
-    cart.belongsTo(models.user, {
-      foreignKey: {
-        allowNull: false
-      }});
-
-    cart.belongsToMany(models.item, {through: "cartItems"})
+    cart.belongsTo(models.user, {onDelete: 'cascade'});
+    cart.belongsToMany(models.item, { through: "cartItems" })
   };
 
 

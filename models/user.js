@@ -56,6 +56,7 @@ module.exports = (sequelize, DataTypes) => {
   // ===============================================
   user.associate = (models) => {
     user.hasOne(models.cart, { onDelete: "cascade" });
+    user.belongsToMany(models.item, { through: 'userClassTable', onDelete: 'cascade' })
   };
 
 

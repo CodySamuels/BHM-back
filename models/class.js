@@ -25,14 +25,25 @@ module.exports = function (sequelize, DataTypes) {
     adminId: {
       type: DataTypes.UUID,
       references: db.user,
-      key: 'id'
+      key: 'userId'
     },
 
+    instructorFirstName: {
+      type: DataTypes.STRING,
+      refereinces: db.user,
+      key: 'firstName'
+    },
+
+    instructorLastName: {
+      type: DataTypes.STRING,
+      refereinces: db.user,
+      key: 'lastName'
+    },
+    
     name: DataTypes.STRING,
     price: DataTypes.DECIMAL,
     inventory: DataTypes.STRING,
     description: DataTypes.STRING,
-    instructor: DataTypes.STRING,
     isActive: DataTypes.BOOLEAN,
   },
 
@@ -40,7 +51,7 @@ module.exports = function (sequelize, DataTypes) {
     // TABLE NAME
     // ===============================================
     {
-      tableName: "item"
+      tableName: "class"
     })
 
 

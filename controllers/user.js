@@ -24,10 +24,7 @@ router.post('/login', async ({ body: { email, password }, session }, res) => {
         let user = await db.User.findOne({ where: { email: email } })
         if (!user) res.status(404).send("No such user exists")
         if (!bcrypt.compareSync(password, user.password)) res.status(401).send("Incorrect password")
-        session.user = {
-            email: user.email,
-            isAdmin: user.isAdmin
-        }
+        session.user = { userId: user.userId }
 
         res.json(session)
     }
@@ -52,17 +49,31 @@ router.post("/register", async (req, res) => {
 })
 
 // UPDATE
-// router.put('/update/', async (req, res) => {
-//     try {
+router.put('/updateAll/:id', async (req, res) => {
+    try {
+        const userData = await db.User.update(req.body, { where: { id: req.params.id } })
+        res.json(userData)
+    }
 
-//         console.log('err')
-//     }
+    catch (err) {
+        console.error(err)
+        res.status(500).end()
+    }
+})
 
-//     catch (err) {
-//         console.error(err)
-//         res.status(500).end()
-//     }
-// })
+// DELETE USER
+router.delete('/delete/:id', async (req, res) => {
+    try {
+        const userData = await db.User.destroy({ where: { id: req.params.id } })
+        res.json(userData)
+    }
+
+    catch (err) {
+        console.error(err)
+        res.status(500).end()
+    }
+})
+
 
 // EXPORT
 // ======================================================

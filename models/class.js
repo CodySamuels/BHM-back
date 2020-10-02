@@ -1,7 +1,7 @@
 // DEPENDENCIES AND VARIABLES
 // ===============================================
 const Sequelize = require("sequelize");
-
+const db = require("../models/");
 
 // MODEL
 // ===============================================
@@ -22,6 +22,12 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false,
     },
 
+    adminId: {
+      type: DataTypes.UUID,
+      references: db.user,
+      key: 'id'
+    },
+
     name: DataTypes.STRING,
     price: DataTypes.DECIMAL,
     inventory: DataTypes.STRING,
@@ -34,7 +40,7 @@ module.exports = function (sequelize, DataTypes) {
     // TABLE NAME
     // ===============================================
     {
-      tableName: "class"
+      tableName: "item"
     })
 
 

@@ -39,12 +39,14 @@ module.exports = function (sequelize, DataTypes) {
       refereinces: db.user,
       key: 'lastName'
     },
-    
+
     name: DataTypes.STRING,
     price: DataTypes.DECIMAL,
     inventory: DataTypes.STRING,
     description: DataTypes.STRING,
     isActive: DataTypes.BOOLEAN,
+    time: DataTypes.STRING,
+    gradeRange: DataTypes.STRING
   },
 
 

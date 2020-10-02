@@ -8,12 +8,11 @@ const bcrypt = require('bcrypt');
 // ROUTES
 // ======================================================
 // READS SESSION COOKIE
-router.get('/readsessions', ({ session: { user } }, res) => {
-    (!user) ? res.status(403).end() : res.json(user)
-})
+router.get('/readsessions', ({ session: { user } }, res) => {(!user) ? res.status(403).end() : res.json(user)})
 
 // LOGOUT
 router.get("/logout", ({ session }, res) => {
+    if (!session.user) res.status(403).end()
     session.destroy();
     res.send("logout complete!")
 })
@@ -50,6 +49,7 @@ router.post("/register", async (req, res) => {
 
 // UPDATE
 router.put('/updateAll/:id', async (req, res) => {
+    if (!req.session.user) res.status(403).end()
     try {
         const userData = await db.User.update(req.body, { where: { id: req.params.id } })
         res.json(userData)
@@ -63,6 +63,7 @@ router.put('/updateAll/:id', async (req, res) => {
 
 // DELETE USER
 router.delete('/delete/:id', async (req, res) => {
+    if (!req.session.user) res.status(403).end()
     try {
         const userData = await db.User.destroy({ where: { id: req.params.id } })
         res.json(userData)

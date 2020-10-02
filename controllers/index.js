@@ -11,7 +11,7 @@ const shopRoutes = require("./stripeController")
 // ===============================================
 router.use("/api/users", userRoutes)
 router.use("/api/classes", classRoutes)
-router.use("/api/classes", shopRoutes)
+router.use("/api/shop", shopRoutes)
 
 // EXPORT
 // ===============================================

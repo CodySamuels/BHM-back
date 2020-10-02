@@ -30,7 +30,7 @@ router.get("/:id", async (req, res) => {
 })
 
 // ADD ITEMS TO CART INFO
-router.post("/api/items", async (req, res) => {
+router.post("/add", async (req, res) => {
   try {
     const shopData = await db.cart.findOne({ where: { id: req.body.cartId } })
     shopData.addItem(req.body.classId)

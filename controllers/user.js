@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 // ROUTES
 // ======================================================
 // READS SESSION COOKIE
-router.get('/readsessions', ({ session: { user } }, res) => {(!user) ? res.status(403).end() : res.json(user)})
+router.get('/readsessions', ({ session: { user } }, res) => { (!user) ? res.status(403).end() : res.json(user) })
 
 // LOGOUT
 router.get("/logout", ({ session }, res) => {
@@ -34,7 +34,7 @@ router.post('/login', async ({ body: { email, password }, session }, res) => {
     }
 })
 
-// REGISTER
+// REGISTER. NEEDS TO CREATE A CART ASSOCIATED WITH THE USER.
 router.post("/register", async (req, res) => {
     try {
         let userData = await db.User.create(req.body)

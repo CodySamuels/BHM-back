@@ -22,7 +22,7 @@ router.get("/getAll", async (req, res) => {
 // GETS A SINGLE CLASS' INFO
 router.get("/:id", async (req, res) => {
     try {
-        const classData = await db.class.findOne({ where: { id: req.params.id } })
+        const classData = await db.item.findOne({ where: { id: req.params.id } })
         res.json(classData)
     }
 
@@ -35,7 +35,7 @@ router.get("/:id", async (req, res) => {
 // CREATES A CLASS
 router.post("/create", async (req, res) => {
     try {
-        const classData = await db.class.create(req.body)
+        const classData = await db.item.create(req.body)
         res.json(classData)
     }
 
@@ -48,7 +48,7 @@ router.post("/create", async (req, res) => {
 // UPDATE A CLASS
 router.put("/:id", async (req, res) => {
     try {
-        const classData = await db.class.update(req.body, { where: { id: req.params.id } })
+        const classData = await db.item.update(req.body, { where: { id: req.params.id } })
         res.json(classData)
     }
 
@@ -61,7 +61,7 @@ router.put("/:id", async (req, res) => {
 // DELETE A CLASS
 router.delete('/delete/:id', async (req, res) => {
     try {
-        const classData = await db.Animal.destroy({ where: { id: req.params.id } })
+        const classData = await db.item.destroy({ where: { id: req.params.id } })
         res.json(classData)
     }
 

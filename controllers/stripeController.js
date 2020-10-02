@@ -16,9 +16,34 @@ router.get('/checkout-session', async (req, res) => {
   res.send(session);
 });
 
+// GETS SHOPPING CART INFO
+router.get("/:id", async (req, res) => {
+  try {
+    const shopData = await db.cart.findOne({ where: { id: req.params.id }, include: [db.item] })
+    res.json(shopData);
+  }
+
+  catch (err) {
+    console.error(err)
+    res.status(500).end()
+  }
+})
+
+// ADD ITEMS TO CART INFO
+router.post("/api/items", async (req, res) => {
+  try {
+    const shopData = await db.cart.findOne({ where: { id: req.body.cartId } })
+    shopData.addItem(req.body.classId)
+    res.json(shopData);
+  }
+  catch (err) {
+    console.error(err)
+    res.status(500).end()
+  }
+})
+
 // CHECKOUT ROUTE
 router.post('/create-checkout-session/:id', async (req, res) => {
-
   try {
     const domainURL = process.env.DOMAIN;
     const cartInfo = await db.cart.findOne({
@@ -93,6 +118,20 @@ router.post('/webhook', async (req, res) => {
 
   res.sendStatus(200);
 });
+
+// ROUTE TO DELETE ITEMS FROM CART
+router.delete("/delete/:cartId/:itemId", async (req, res) => {
+  try {
+    const shopData = await db.cart.findOne({ where: { id: req.params.cartId } })
+    shopData.removeItem(req.params.itemId)
+    res.send(shopData)
+  }
+
+  catch (err) {
+    console.error(err)
+    res.status(500).end()
+  }
+})
 
 
 // EXPORT

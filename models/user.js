@@ -43,6 +43,7 @@ module.exports = (sequelize, DataTypes) => {
     state: DataTypes.STRING,
     zip: DataTypes.STRING,
     phoneNumber: DataTypes.STRING,
+    confirmedEmail: DataTypes.BOOLEAN,
   },
 
 

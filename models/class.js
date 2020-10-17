@@ -6,10 +6,6 @@ const db = require("../models/");
 // MODEL
 // ===============================================
 module.exports = function (sequelize, DataTypes) {
-
-
-  // TABLE COLUMNS
-  // ===============================================
   const item = sequelize.define("item", {
 
 

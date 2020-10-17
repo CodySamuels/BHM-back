@@ -11,19 +11,19 @@ const bcrypt = require('bcrypt');
 router.get('/readsessions', ({ session: { user } }, res) => { (!user) ? res.status(403).end() : res.json(user) })
 
 // LOGOUT
-router.get("/logout", ({ session }, res) => {
+router.get("/logout", ({ session } = req, res) => {
     if (!session.user) res.status(403).end()
     session.destroy();
     res.send("logout complete!")
 })
 
 // LOGIN
-router.post('/login', async ({ body: { email, password }, session }, res) => {
+router.post('/login', async ({ body: { email, password } = req, session }, res) => {
     try {
-        let user = await db.User.findOne({ where: { email: email } })
+        let user = await db.user.findOne({ where: { email: email } })
         if (!user) res.status(404).send("No such user exists")
         if (!bcrypt.compareSync(password, user.password)) res.status(401).send("Incorrect password")
-        session.user = { userId: user.userId }
+        session.user = user
 
         res.json(session)
     }
@@ -37,7 +37,7 @@ router.post('/login', async ({ body: { email, password }, session }, res) => {
 // REGISTER. NEEDS TO CREATE A CART ASSOCIATED WITH THE USER.
 router.post("/register", async (req, res) => {
     try {
-        let userData = await db.User.create(req.body)
+        let userData = await db.user.create(req.body)
         res.json(userData)
     }
 
@@ -48,11 +48,14 @@ router.post("/register", async (req, res) => {
 })
 
 // UPDATE
-router.put('/updateAll/:id', async (req, res) => {
-    if (!req.session.user) res.status(403).end()
+router.put('/updateAll/:id', async ({ session, body, params: { id } } = req, res) => {
+    if (!session.user) res.status(403).end()
     try {
-        const userData = await db.User.update(req.body, { where: { id: req.params.id } })
-        res.json(userData)
+        const userData = await db.user.update(body, { where: { userId: id } })
+        session.destroy()
+        let user = await db.user.findOne({ where: { userId: id } })
+        session.user = user
+        res.json(user)
     }
 
     catch (err) {
@@ -62,10 +65,10 @@ router.put('/updateAll/:id', async (req, res) => {
 })
 
 // DELETE USER
-router.delete('/delete/:id', async (req, res) => {
-    if (!req.session.user) res.status(403).end()
+router.delete('/delete/:id', async ({ session, params: { id } } = req, res) => {
+    if (!session.user) res.status(403).end()
     try {
-        const userData = await db.User.destroy({ where: { id: req.params.id } })
+        const userData = await db.user.destroy({ where: { userId: id } })
         res.json(userData)
     }
 

@@ -49,13 +49,11 @@ router.post("/register", async (req, res) => {
 
 // UPDATE
 router.put('/updateAll/:id', async ({ session, body, params: { id } } = req, res) => {
-    if (!session.user) res.status(403).end()
+    if (session.user.userId !== id) res.status(403).end()
     try {
         const userData = await db.user.update(body, { where: { userId: id } })
-        session.destroy()
-        let user = await db.user.findOne({ where: { userId: id } })
-        session.user = user
-        res.json(user)
+        session.user = await db.user.findOne({ where: { userId: id } })
+        res.json(session)
     }
 
     catch (err) {
@@ -66,9 +64,10 @@ router.put('/updateAll/:id', async ({ session, body, params: { id } } = req, res
 
 // DELETE USER
 router.delete('/delete/:id', async ({ session, params: { id } } = req, res) => {
-    if (!session.user) res.status(403).end()
+    if (session.user.userId !== id) res.status(403).end()
     try {
         const userData = await db.user.destroy({ where: { userId: id } })
+        session.destroy()
         res.json(userData)
     }
 

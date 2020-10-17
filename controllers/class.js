@@ -20,9 +20,9 @@ router.get("/getAll", async (req, res) => {
 })
 
 // GETS A SINGLE CLASS' INFO
-router.get("/:id", async ({ params: { id } } = req, res) => {
+router.get("/:classId", async ({ params: { classId } } = req, res) => {
     try {
-        const classData = await db.item.findOne({ where: { classId: id } })
+        const classData = await db.item.findOne({ where: { classId: classId } })
         res.json(classData)
     }
 

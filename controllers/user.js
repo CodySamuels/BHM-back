@@ -48,11 +48,11 @@ router.post("/register", async (req, res) => {
 })
 
 // UPDATE
-router.put('/update/:id', async ({ session, body, params: { id } } = req, res) => {
-    if (session.user.userId !== id) res.status(403).end()
+router.put('/update/:userId', async ({ session, body, params: { userId } } = req, res) => {
+    if (session.user.userId !== userId) res.status(403).end()
     try {
-        const userData = await db.user.update(body, { where: { userId: id } })
-        session.user = await db.user.findOne({ where: { userId: id } })
+        const userData = await db.user.update(body, { where: { userId: userId } })
+        session.user = await db.user.findOne({ where: { userId: userId } })
         res.json(session)
     }
 
@@ -63,10 +63,10 @@ router.put('/update/:id', async ({ session, body, params: { id } } = req, res) =
 })
 
 // DELETE USER
-router.delete('/delete/:id', async ({ session, params: { id } } = req, res) => {
-    if (session.user.userId !== id) res.status(403).end()
+router.delete('/delete/:userId', async ({ session, params: { userId } } = req, res) => {
+    if (session.user.userId !== userId) res.status(403).end()
     try {
-        const userData = await db.user.destroy({ where: { userId: id } })
+        const userData = await db.user.destroy({ where: { userId: userId } })
         session.destroy()
         res.json(userData)
     }

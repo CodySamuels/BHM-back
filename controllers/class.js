@@ -6,7 +6,7 @@ const router = require("express").Router();
 
 // ROUTES
 // ======================================================
-// GET ALL CLASS INFO. FOR DEVELOPER USE
+// GET ALL CLASS INFO
 router.get("/getAll", async (req, res) => {
     try {
         const classData = await db.item.findAll()
@@ -46,10 +46,10 @@ router.post("/create", async ({ body } = req, res) => {
 })
 
 // UPDATE A CLASS
-router.put("/update/:id", async ({ body, params: { id } } = req, res) => {
+router.put("/update/:classId", async ({ body, params: { classId } } = req, res) => {
     try {
-        const classDataUpdate = await db.item.update(body, { where: { classId: id } })
-        const classData = await db.item.findOne({ where: { classId: id } })
+        const classDataUpdate = await db.item.update(body, { where: { classId: classId } })
+        const classData = await db.item.findOne({ where: { classId: classId } })
         res.json(classData)
     }
 
@@ -60,9 +60,9 @@ router.put("/update/:id", async ({ body, params: { id } } = req, res) => {
 })
 
 // DELETE A CLASS
-router.delete('/delete/:id', async ({ params: { id } } = req, res) => {
+router.delete('/delete/:classId', async ({ params: { classId } } = req, res) => {
     try {
-        const classData = await db.item.destroy({ where: { classId: id } })
+        const classData = await db.item.destroy({ where: { classId: classId } })
         res.json(classData)
     }
 

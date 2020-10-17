@@ -30,13 +30,13 @@ module.exports = function (sequelize, DataTypes) {
 
     instructorFirstName: {
       type: DataTypes.STRING,
-      refereinces: db.user,
+      references: db.user,
       key: 'firstName'
     },
 
     instructorLastName: {
       type: DataTypes.STRING,
-      refereinces: db.user,
+      references: db.user,
       key: 'lastName'
     },
 

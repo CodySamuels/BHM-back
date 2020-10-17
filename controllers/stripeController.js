@@ -6,20 +6,26 @@ require('dotenv').config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 const db = require("../models/");
 
-
 // ROUTES
 // ======================================================
 // CHECKOUT SESSION INFO
 router.get('/checkout-session', async (req, res) => {
-  const { sessionId } = req.query;
-  const session = await stripe.checkout.sessions.retrieve(sessionId);
-  res.send(session);
+  try {
+    const { sessionId } = req.query;
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    res.send(session);
+  }
+
+  catch (err) {
+    console.error(err)
+    res.status(500).end()
+  }
 });
 
 // GETS SHOPPING CART INFO
-router.get("/:id", async (req, res) => {
+router.get("/:id", async ({ req: { params: { id } } } = req, res) => {
   try {
-    const shopData = await db.cart.findOne({ where: { id: req.params.id }, include: [db.item] })
+    const shopData = await db.cart.findOne({ where: { id: id }, include: [db.item] })
     res.json(shopData);
   }
 

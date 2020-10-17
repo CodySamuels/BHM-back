@@ -48,7 +48,7 @@ router.post("/register", async (req, res) => {
 })
 
 // UPDATE
-router.put('/updateAll/:id', async ({ session, body, params: { id } } = req, res) => {
+router.put('/update/:id', async ({ session, body, params: { id } } = req, res) => {
     if (session.user.userId !== id) res.status(403).end()
     try {
         const userData = await db.user.update(body, { where: { userId: id } })

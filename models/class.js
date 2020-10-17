@@ -41,7 +41,7 @@ module.exports = function (sequelize, DataTypes) {
     },
 
     name: DataTypes.STRING,
-    price: DataTypes.DECIMAL,
+    price: DataTypes.FLOAT,
     inventory: DataTypes.STRING,
     description: DataTypes.STRING,
     isActive: DataTypes.BOOLEAN,

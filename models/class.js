@@ -56,8 +56,8 @@ module.exports = function (sequelize, DataTypes) {
   // ASSOCIATIONS
   // ===============================================
   item.associate = (models) => {
-    item.belongsToMany(models.cart, { through: "cartItems", onDelete: 'cascade' })
-    item.belongsToMany(models.user, { through: 'userClassTable', onDelete: 'cascade' })
+    item.belongsToMany(models.cart, { through: 'classes_in_a_cart', onDelete: 'cascade' })
+    item.belongsToMany(models.user, { through: 'users_in_a_class_table', onDelete: 'cascade' })
   };
 
 

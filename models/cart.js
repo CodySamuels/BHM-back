@@ -9,7 +9,7 @@ module.exports = function (sequelize, DataTypes) {
   // ===============================================
   cart.associate = (models) => {
     cart.belongsTo(models.user, { onDelete: 'cascade' });
-    cart.belongsToMany(models.item, { through: "cartItems" })
+    cart.belongsToMany(models.item, { through: "classes_in_a_cart" })
   };
 
 

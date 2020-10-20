@@ -24,7 +24,6 @@ router.post('/login', async ({ body: { email, password }, session } = req, res) 
         if (!user) res.status(404).send("No such user exists")
         if (!bcrypt.compareSync(password, user.password)) res.status(401).send("Incorrect password")
         session.user = userData
-
         res.json(session)
     }
 

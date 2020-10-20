@@ -24,17 +24,17 @@ module.exports = function (sequelize, DataTypes) {
       key: 'userId'
     },
 
-    instructorFirstName: {
-      type: DataTypes.STRING,
-      references: db.user,
-      key: 'firstName'
-    },
+    // instructorFirstName: {
+    //   type: DataTypes.STRING,
+    //   references: db.user,
+    //   key: 'firstName'
+    // },
 
-    instructorLastName: {
-      type: DataTypes.STRING,
-      references: db.user,
-      key: 'lastName'
-    },
+    // instructorLastName: {
+    //   type: DataTypes.STRING,
+    //   references: db.user,
+    //   key: 'lastName'
+    // },
 
     name: DataTypes.STRING,
     price: DataTypes.FLOAT,

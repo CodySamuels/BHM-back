@@ -8,7 +8,7 @@ const bcrypt = require('bcrypt');
 // ROUTES
 // ======================================================
 // READS SESSION COOKIE
-router.get('/readsessions', ({ session: { user } }, res) => { (!user) ? res.status(403).end() : res.json(user) })
+router.get('/readsessions', ({ session: { user } } = req, res) => { (!user) ? res.status(403).end() : res.json(user) })
 
 // LOGOUT
 router.get("/logout", ({ session } = req, res) => {
@@ -18,12 +18,12 @@ router.get("/logout", ({ session } = req, res) => {
 })
 
 // LOGIN
-router.post('/login', async ({ body: { email, password } = req, session }, res) => {
+router.post('/login', async ({ body: { email, password }, session } = req, res) => {
     try {
-        let user = await db.user.findOne({ where: { email: email } })
+        const userData = await db.user.findOne({ where: { email: email } })
         if (!user) res.status(404).send("No such user exists")
         if (!bcrypt.compareSync(password, user.password)) res.status(401).send("Incorrect password")
-        session.user = user
+        session.user = userData
 
         res.json(session)
     }

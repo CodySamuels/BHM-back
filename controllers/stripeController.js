@@ -9,9 +9,9 @@ const db = require("../models/");
 // ROUTES
 // ======================================================
 // CHECKOUT SESSION INFO
-router.get('/checkout-session', async (req, res) => {
+router.get('/checkout-session', async ({ query } = req, res) => {
   try {
-    const { sessionId } = req.query;
+    const { sessionId } = query;
     const session = await stripe.checkout.sessions.retrieve(sessionId);
     res.send(session);
   }
@@ -23,9 +23,9 @@ router.get('/checkout-session', async (req, res) => {
 });
 
 // GETS SHOPPING CART INFO
-router.get("/:id", async ({ req: { params: { id } } } = req, res) => {
+router.get("/:cartId", async ({ params: { cartId } } = req, res) => {
   try {
-    const shopData = await db.cart.findOne({ where: { id: id }, include: [db.item] })
+    const shopData = await db.cart.findOne({ where: { cartId: cartId }, include: [db.item] })
     res.json(shopData);
   }
 
@@ -36,10 +36,10 @@ router.get("/:id", async ({ req: { params: { id } } } = req, res) => {
 })
 
 // ADD ITEMS TO CART INFO
-router.post("/add", async (req, res) => {
+router.post("/add", async ({ body: { classId, cartId } } = req, res) => {
   try {
-    const shopData = await db.cart.findOne({ where: { id: req.body.cartId } })
-    shopData.addItem(req.body.classId)
+    const shopData = await db.cart.findOne({ where: { cartId: cartId } })
+    shopData.addItem(classId)
     res.json(shopData);
   }
   catch (err) {

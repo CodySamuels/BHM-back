@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const userRoutes = require("./user")
 const classRoutes = require("./class")
-const shopRoutes = require("./stripeController")
+const shopRoutes = require("./shoppingController")
 
 
 // SUBROUTES

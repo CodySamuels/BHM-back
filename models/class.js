@@ -11,7 +11,7 @@ module.exports = function (sequelize, DataTypes) {
 
     // TABLE COLUMNS
     // ===============================================
-    classId: {
+    id: {
       type: DataTypes.UUID,
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,

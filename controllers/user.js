@@ -18,11 +18,11 @@ router.get("/logout", ({ session } = req, res) => {
 })
 
 // LOGIN
-router.post('/login', async ({ body: { email, password }, session } = req, res) => {
+router.post('/login', async ({ session, body: { email, password } } = req, res) => {
     try {
         const userData = await db.user.findOne({ where: { email: email } })
-        if (!user) res.status(404).send("No such user exists")
-        if (!bcrypt.compareSync(password, user.password)) res.status(401).send("Incorrect password")
+        if (!userData) res.status(404).send("No such user exists")
+        if (!bcrypt.compareSync(password, userData.password)) res.status(401).send("Incorrect password")
         session.user = userData
         res.json(session)
     }
@@ -34,10 +34,13 @@ router.post('/login', async ({ body: { email, password }, session } = req, res) 
 })
 
 // REGISTER. NEEDS TO CREATE A CART ASSOCIATED WITH THE USER.
-router.post("/register", async (req, res) => {
+router.post("/register", async ({ body } = req, res) => {
     try {
-        let userData = await db.user.create(req.body)
-        res.json(userData)
+        const userData = await db.user.create(body)
+        const newCart = await db.cart.create({ userId: userData.id })
+        await db.user.update({ cartId: newCart.id }, { where: { id: userData.id } })
+        userWithCart = await db.user.findOne({ where: { id: userData.id } })
+        res.json(userWithCart)
     }
 
     catch (err) {
@@ -47,11 +50,11 @@ router.post("/register", async (req, res) => {
 })
 
 // UPDATE
-router.put('/update/:userId', async ({ session, body, params: { userId } } = req, res) => {
-    if (session.user.userId !== userId) res.status(403).end()
+router.put('/update/:id', async ({ session, body, params: { id } } = req, res) => {
+    if (session.user.id !== id) res.status(403).end()
     try {
-        const userData = await db.user.update(body, { where: { userId: userId } })
-        session.user = await db.user.findOne({ where: { userId: userId } })
+        const userData = await db.user.update(body, { where: { id: id } })
+        session.user = await db.user.findOne({ where: { id: id } })
         res.json(session)
     }
 
@@ -62,10 +65,10 @@ router.put('/update/:userId', async ({ session, body, params: { userId } } = req
 })
 
 // DELETE USER
-router.delete('/delete/:userId', async ({ session, params: { userId } } = req, res) => {
-    if (session.user.userId !== userId) res.status(403).end()
+router.delete('/delete/:id', async ({ session, params: { id } } = req, res) => {
+    if (session.user.id !== id) res.status(403).end()
     try {
-        const userData = await db.user.destroy({ where: { userId: userId } })
+        const userData = await db.user.destroy({ where: { id: id } })
         session.destroy()
         res.json(userData)
     }

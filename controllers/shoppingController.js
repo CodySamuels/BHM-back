@@ -23,9 +23,9 @@ router.get('/checkout-session', async ({ query } = req, res) => {
 });
 
 // GETS SHOPPING CART INFO
-router.get("/:cartId", async ({ params: { cartId } } = req, res) => {
+router.get("/:id", async ({ params: { id } } = req, res) => {
   try {
-    const shopData = await db.cart.findOne({ where: { cartId: cartId }, include: [db.item] })
+    const shopData = await db.cart.findOne({ where: { id: id }, include: [db.item] })
     res.json(shopData);
   }
 
@@ -38,7 +38,7 @@ router.get("/:cartId", async ({ params: { cartId } } = req, res) => {
 // ADD ITEMS TO CART INFO
 router.post("/add", async ({ body: { classId, cartId } } = req, res) => {
   try {
-    const shopData = await db.cart.findOne({ where: { cartId: cartId } })
+    const shopData = await db.cart.findOne({ where: { id: cartId } })
     shopData.addItem(classId)
     res.json(shopData);
   }
@@ -126,10 +126,10 @@ router.post('/webhook', async (req, res) => {
 });
 
 // ROUTE TO DELETE ITEMS FROM CART
-router.delete("/delete/:cartId/:itemId", async (req, res) => {
+router.delete("/delete/:cartId/:itemId", async ({ params: { cartId, itemId } } = req, res) => {
   try {
-    const shopData = await db.cart.findOne({ where: { id: req.params.cartId } })
-    shopData.removeItem(req.params.itemId)
+    const shopData = await db.cart.findOne({ where: { id: cartId } })
+    shopData.removeItem(itemId)
     res.send(shopData)
   }
 

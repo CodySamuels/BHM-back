@@ -2,7 +2,6 @@
 // ===============================================
 const Sequelize = require("sequelize");
 const bcrypt = require("bcrypt");
-const db = require("../models/");
 
 
 // MODEL
@@ -18,12 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: Sequelize.UUIDV4,
       primaryKey: true,
       allowNull: false,
-    },
-
-    cartId: {
-      type: DataTypes.UUID,
-      references: db.cart,
-      key: 'id'
     },
 
     email: {

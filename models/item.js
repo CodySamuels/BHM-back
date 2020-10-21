@@ -21,7 +21,7 @@ module.exports = function (sequelize, DataTypes) {
     adminId: {
       type: DataTypes.UUID,
       references: db.user,
-      key: 'userId'
+      key: 'id'
     },
 
     name: DataTypes.STRING,

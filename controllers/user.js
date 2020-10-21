@@ -13,7 +13,7 @@ const bcrypt = require('bcrypt');
 // ROUTES
 // ======================================================
 // READS SESSION COOKIE
-router.get('/readsessions', ({ session: { user } } = req, res) => { (!user) ? res.status(403).end() : res.json(user) })
+router.get('/readsessions', ({ session } = req, res) => { (!session) ? res.status(403).end() : res.json(session) })
 
 // LOGOUT
 router.get("/logout", ({ session } = req, res) => {
@@ -28,7 +28,7 @@ router.post('/login', async ({ session, body: { email, password } } = req, res) 
         const userData = await db.user.findOne({ where: { email: email }, include: [db.cart] })
         if (!userData) res.status(404).send("No such user exists")
         if (!bcrypt.compareSync(password, userData.password)) res.status(401).send("Incorrect password")
-        const cartData = await db.cart.findOne({ where: { id: userData.cartId }, include: [db.item] })
+        const cartData = await db.cart.findOne({ where: { id: userData.cart.id }, include: [db.item] })
         session.user = userData
         session.cart = cartData
         res.json(session)
@@ -44,8 +44,7 @@ router.post('/login', async ({ session, body: { email, password } } = req, res) 
 router.post("/register", async ({ body } = req, res) => {
     try {
         const userData = await db.user.create(body)
-        const newCart = await db.cart.create({ userId: userData.id })
-        await db.user.update({ cartId: newCart.id }, { where: { id: userData.id } })
+        await db.cart.create({ userId: userData.id })
         userWithCart = await db.user.findOne({ where: { id: userData.id } })
         res.json(userWithCart)
     }

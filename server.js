@@ -70,7 +70,7 @@ app.get("/", (req, res) => res.send("nothing to see here"))
 // SEQUELIZE SYNC AND SERVER START
 // =====================================================
 const serverStart = async () => {
-  await db.sequelize.sync({ force: false })
+  await db.sequelize.sync({ force: true })
   await app.listen(PORT)
   console.log(`App listening on PORT: ${PORT}`)
   console.log('-------------------------------------------------------------------------------------')

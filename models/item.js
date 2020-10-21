@@ -3,6 +3,7 @@
 const Sequelize = require("sequelize");
 const db = require("../models/");
 
+
 // MODEL
 // ===============================================
 module.exports = function (sequelize, DataTypes) {

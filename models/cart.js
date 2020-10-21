@@ -38,7 +38,7 @@ module.exports = function (sequelize, DataTypes) {
   // ===============================================
   cart.associate = (models) => {
     cart.belongsTo(models.user, { onDelete: 'cascade' });
-    cart.belongsToMany(models.item, { through: 'cart_content' })
+    cart.belongsToMany(models.item, { through: 'cart_content', onDelete: 'cascade' })
   };
 
 

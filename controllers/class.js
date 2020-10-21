@@ -4,9 +4,9 @@ const db = require("../models");
 const router = require("express").Router();
 
 
-// All USER routes are prefixed by: '/API/users'
-// All CLASS routes are prefixed by: '/API/classes'
-// All SHOPPING routes are prefixed by: '/shop'
+// All USER routes are prefixed by: '/API/users/'
+// All CLASS routes are prefixed by: '/API/classes/'
+// All SHOPPING routes are prefixed by: '/shop/'
 
 
 // ROUTES

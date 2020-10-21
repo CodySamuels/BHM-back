@@ -8,9 +8,9 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 const db = require("../models/");
 
 
-// All USER routes are prefixed by: '/API/users'
-// All CLASS routes are prefixed by: '/API/classes'
-// All SHOPPING routes are prefixed by: '/shop'
+// All USER routes are prefixed by: '/API/users/'
+// All CLASS routes are prefixed by: '/API/classes/'
+// All SHOPPING routes are prefixed by: '/shop/'
 
 // ROUTES
 // ======================================================

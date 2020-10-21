@@ -22,7 +22,7 @@ module.exports = function (sequelize, DataTypes) {
     userId: {
       type: DataTypes.UUID,
       references: db.user,
-      key: 'userId'
+      key: 'id'
     },
   },
 

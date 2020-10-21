@@ -45,7 +45,7 @@ router.post("/register", async ({ body } = req, res) => {
     try {
         const userData = await db.user.create(body)
         await db.cart.create({ userId: userData.id })
-        userWithCart = await db.user.findOne({ where: { id: userData.id }, include: [db.cart] })
+        const userWithCart = await db.user.findOne({ where: { id: userData.id }, include: [db.cart] })
         res.json(userWithCart)
     }
 

@@ -11,7 +11,7 @@ const router = require("express").Router();
 
 // ROUTES
 // ======================================================
-// GET ALL CLASS INFO
+// GET ALL CLASSES INFO
 router.get("/getAll", async (req, res) => {
     try {
         const classData = await db.item.findAll()
@@ -27,8 +27,21 @@ router.get("/getAll", async (req, res) => {
 // GETS A SINGLE CLASS' INFO
 router.get("/:id", async ({ params: { id } } = req, res) => {
     try {
-        const classData = await db.item.findOne({ where: { id: id }, include: db.user })
+        const classData = await db.item.findOne({ where: { id: id }, include: [db.roster] })
         res.json(classData)
+    }
+
+    catch (err) {
+        console.error(err)
+        res.status(500).end()
+    }
+})
+
+// GETS ROSTER INFO
+router.get("/roster/:id", async ({ params: { id } } = req, res) => {
+    try {
+        const rosterData = await db.roster.findOne({ where: { id: id }, include: [db.user] })
+        res.json(rosterData);
     }
 
     catch (err) {
@@ -41,7 +54,9 @@ router.get("/:id", async ({ params: { id } } = req, res) => {
 router.post("/create", async ({ body } = req, res) => {
     try {
         const classData = await db.item.create(body)
-        res.json(classData)
+        await db.roster.create({ itemId: classData.id })
+        const classWithRoster = await db.item.findOne({ where: { id: classData.id }, include: db.roster })
+        res.json(classWithRoster)
     }
 
     catch (err) {
@@ -51,18 +66,18 @@ router.post("/create", async ({ body } = req, res) => {
 })
 
 // ADD A USER TO A CLASS' ROSTER
-// router.post("/addStudent", async ({ body: { classId, userId } } = req, res) => {
-//     try {
-//         const classRosterData = await db.item.findOne({ where: { id: classId } })
-//         classRosterData.addItem(userId)
-//         res.json(classRosterData);
-//     }
+router.post("/addStudent", async ({ body: { rosterId, userId } } = req, res) => {
+    try {
+        const classRosterData = await db.roster.findOne({ where: { id: rosterId }, include: [db.user] })
+        classRosterData.addItem(userId)
+        res.json(classRosterData);
+    }
 
-//     catch (err) {
-//         console.error(err)
-//         res.status(500).end()
-//     }
-// })
+    catch (err) {
+        console.error(err)
+        res.status(500).end()
+    }
+})
 
 // UPDATE A CLASS
 router.put("/update/:id", async ({ body, params: { id } } = req, res) => {

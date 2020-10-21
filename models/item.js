@@ -3,6 +3,7 @@
 const Sequelize = require("sequelize");
 const db = require("../models/");
 
+
 // MODEL
 // ===============================================
 module.exports = function (sequelize, DataTypes) {
@@ -44,8 +45,9 @@ module.exports = function (sequelize, DataTypes) {
   // ASSOCIATIONS
   // ===============================================
   item.associate = (models) => {
+    item.hasOne(models.roster, { onDelete: 'cascade' });
     item.belongsToMany(models.cart, { through: 'cart_content', onDelete: 'cascade' })
-    item.belongsToMany(models.user, { through: 'class_roster', onDelete: 'cascade' })
+    // item.belongsToMany(models.user, { through: 'class_roster', onDelete: 'cascade' })
   };
 
 

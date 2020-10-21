@@ -62,11 +62,15 @@ app.use('/', routes);
 // HOME ROUTE
 app.get("/", (req, res) => res.send("nothing to see here"))
 
+// All USER routes are prefixed by: '/API/users'
+// All CLASS routes are prefixed by: '/API/classes'
+// All SHOPPING routes are prefixed by: '/shop'
+
 
 // SEQUELIZE SYNC AND SERVER START
 // =====================================================
 const serverStart = async () => {
-  await db.sequelize.sync({ force: true })
+  await db.sequelize.sync({ force: false })
   await app.listen(PORT)
   console.log(`App listening on PORT: ${PORT}`)
   console.log('-------------------------------------------------------------------------------------')

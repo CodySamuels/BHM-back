@@ -4,6 +4,11 @@ const db = require("../models");
 const router = require("express").Router();
 
 
+// All USER routes are prefixed by: '/API/users'
+// All CLASS routes are prefixed by: '/API/classes'
+// All SHOPPING routes are prefixed by: '/shop'
+
+
 // ROUTES
 // ======================================================
 // GET ALL CLASS INFO
@@ -22,7 +27,7 @@ router.get("/getAll", async (req, res) => {
 // GETS A SINGLE CLASS' INFO
 router.get("/:id", async ({ params: { id } } = req, res) => {
     try {
-        const classData = await db.item.findOne({ where: { id: id } })
+        const classData = await db.item.findOne({ where: { id: id }, include: db.user })
         res.json(classData)
     }
 
@@ -45,10 +50,24 @@ router.post("/create", async ({ body } = req, res) => {
     }
 })
 
+// ADD A USER TO A CLASS' ROSTER
+// router.post("/addStudent", async ({ body: { classId, userId } } = req, res) => {
+//     try {
+//         const classRosterData = await db.item.findOne({ where: { id: classId } })
+//         classRosterData.addItem(userId)
+//         res.json(classRosterData);
+//     }
+
+//     catch (err) {
+//         console.error(err)
+//         res.status(500).end()
+//     }
+// })
+
 // UPDATE A CLASS
 router.put("/update/:id", async ({ body, params: { id } } = req, res) => {
     try {
-        const classDataUpdate = await db.item.update(body, { where: { id: id } })
+        await db.item.update(body, { where: { id: id } })
         const classData = await db.item.findOne({ where: { id: id } })
         res.json(classData)
     }

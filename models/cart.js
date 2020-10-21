@@ -24,14 +24,21 @@ module.exports = function (sequelize, DataTypes) {
       references: db.user,
       key: 'userId'
     },
-  })
+  },
+
+
+    // TABLE NAME
+    // ===============================================
+    {
+      tableName: "cart"
+    })
 
 
   // ASSOCIATIONS
   // ===============================================
   cart.associate = (models) => {
     cart.belongsTo(models.user, { onDelete: 'cascade' });
-    cart.belongsToMany(models.item, { through: "classes_in_a_cart" })
+    cart.belongsToMany(models.item, { through: 'cart_content' })
   };
 
 

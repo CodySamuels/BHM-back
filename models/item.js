@@ -24,18 +24,6 @@ module.exports = function (sequelize, DataTypes) {
       key: 'userId'
     },
 
-    // instructorFirstName: {
-    //   type: DataTypes.STRING,
-    //   references: db.user,
-    //   key: 'firstName'
-    // },
-
-    // instructorLastName: {
-    //   type: DataTypes.STRING,
-    //   references: db.user,
-    //   key: 'lastName'
-    // },
-
     name: DataTypes.STRING,
     price: DataTypes.FLOAT,
     inventory: DataTypes.STRING,
@@ -56,8 +44,8 @@ module.exports = function (sequelize, DataTypes) {
   // ASSOCIATIONS
   // ===============================================
   item.associate = (models) => {
-    item.belongsToMany(models.cart, { through: 'classes_in_a_cart', onDelete: 'cascade' })
-    item.belongsToMany(models.user, { through: 'users_in_a_class_table', onDelete: 'cascade' })
+    item.belongsToMany(models.cart, { through: 'cart_content', onDelete: 'cascade' })
+    item.belongsToMany(models.user, { through: 'class_roster', onDelete: 'cascade' })
   };
 
 

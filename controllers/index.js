@@ -4,14 +4,14 @@ const express = require("express");
 const router = express.Router();
 const userRoutes = require("./user")
 const classRoutes = require("./class")
-const shopRoutes = require("./shoppingController")
+const shopRoutes = require("./shopping")
 
 
 // SUBROUTES
 // ===============================================
 router.use("/api/users", userRoutes)
 router.use("/api/classes", classRoutes)
-router.use("/api/shop", shopRoutes)
+router.use("/shop", shopRoutes)
 
 // EXPORT
 // ===============================================

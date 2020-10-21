@@ -5,6 +5,11 @@ const router = require("express").Router();
 const bcrypt = require('bcrypt');
 
 
+// All USER routes are prefixed by: '/API/users'
+// All CLASS routes are prefixed by: '/API/classes'
+// All SHOPPING routes are prefixed by: '/shop'
+
+
 // ROUTES
 // ======================================================
 // READS SESSION COOKIE
@@ -20,10 +25,12 @@ router.get("/logout", ({ session } = req, res) => {
 // LOGIN
 router.post('/login', async ({ session, body: { email, password } } = req, res) => {
     try {
-        const userData = await db.user.findOne({ where: { email: email } })
+        const userData = await db.user.findOne({ where: { email: email }, include: [db.cart] })
         if (!userData) res.status(404).send("No such user exists")
         if (!bcrypt.compareSync(password, userData.password)) res.status(401).send("Incorrect password")
+        const cartData = await db.cart.findOne({ where: { id: userData.cartId }, include: [db.item] })
         session.user = userData
+        session.cart = cartData
         res.json(session)
     }
 
@@ -53,8 +60,8 @@ router.post("/register", async ({ body } = req, res) => {
 router.put('/update/:id', async ({ session, body, params: { id } } = req, res) => {
     if (session.user.id !== id) res.status(403).end()
     try {
-        const userData = await db.user.update(body, { where: { id: id } })
-        session.user = await db.user.findOne({ where: { id: id } })
+        await db.user.update(body, { where: { id: id } })
+        session.user = await db.user.findOne({ where: { id: id }, include: [db.cart] })
         res.json(session)
     }
 

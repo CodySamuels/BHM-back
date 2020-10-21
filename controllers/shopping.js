@@ -1,10 +1,16 @@
 // DEPENDENCIES
 // ======================================================
 const express = require("express");
+const session = require("express-session");
 const router = express.Router();
 require('dotenv').config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY)
 const db = require("../models/");
+
+
+// All USER routes are prefixed by: '/API/users'
+// All CLASS routes are prefixed by: '/API/classes'
+// All SHOPPING routes are prefixed by: '/shop'
 
 // ROUTES
 // ======================================================
@@ -35,13 +41,15 @@ router.get("/:id", async ({ params: { id } } = req, res) => {
   }
 })
 
-// ADD ITEMS TO CART INFO
-router.post("/add", async ({ body: { classId, cartId } } = req, res) => {
+// ADD ITEMS TO CART
+router.post("/add", async ({ session, body: { cartId, classId } } = req, res) => {
   try {
-    const shopData = await db.cart.findOne({ where: { id: cartId } })
-    shopData.addItem(classId)
-    res.json(shopData);
+    const cartData = await db.cart.findOne({ where: { id: cartId }, include: [db.item] })
+    cartData.addItem(classId)
+    session.cart = cartData
+    res.json(cartData);
   }
+
   catch (err) {
     console.error(err)
     res.status(500).end()
@@ -126,11 +134,12 @@ router.post('/webhook', async (req, res) => {
 });
 
 // ROUTE TO DELETE ITEMS FROM CART
-router.delete("/delete/:cartId/:itemId", async ({ params: { cartId, itemId } } = req, res) => {
+router.delete("/delete/:cartId/:itemId", async ({ session, params: { itemId, cartId } } = req, res) => {
   try {
-    const shopData = await db.cart.findOne({ where: { id: cartId } })
-    shopData.removeItem(itemId)
-    res.send(shopData)
+    const cartData = await db.cart.findOne({ where: { id: cartId } })
+    cartData.removeItem(itemId)
+    session.cart = cartData
+    res.send(cartData)
   }
 
   catch (err) {

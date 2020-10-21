@@ -27,21 +27,8 @@ router.get("/getAll", async (req, res) => {
 // GETS A SINGLE CLASS' INFO
 router.get("/:id", async ({ params: { id } } = req, res) => {
     try {
-        const classData = await db.item.findOne({ where: { id: id }, include: [db.roster] })
+        const classData = await db.item.findOne({ where: { id: id }, include: [db.user] })
         res.json(classData)
-    }
-
-    catch (err) {
-        console.error(err)
-        res.status(500).end()
-    }
-})
-
-// GETS ROSTER INFO
-router.get("/roster/:id", async ({ params: { id } } = req, res) => {
-    try {
-        const rosterData = await db.roster.findOne({ where: { id: id }, include: [db.user] })
-        res.json(rosterData);
     }
 
     catch (err) {
@@ -54,8 +41,8 @@ router.get("/roster/:id", async ({ params: { id } } = req, res) => {
 router.post("/create", async ({ body } = req, res) => {
     try {
         const classData = await db.item.create(body)
-        await db.roster.create({ itemId: classData.id })
-        const classWithRoster = await db.item.findOne({ where: { id: classData.id }, include: db.roster })
+        // await db.roster.create({ itemId: classData.id })
+        const classWithRoster = await db.item.findOne({ where: { id: classData.id }, include: db.user })
         res.json(classWithRoster)
     }
 
@@ -66,10 +53,10 @@ router.post("/create", async ({ body } = req, res) => {
 })
 
 // ADD A USER TO A CLASS' ROSTER
-router.post("/addStudent", async ({ body: { rosterId, userId } } = req, res) => {
+router.post("/addStudent", async ({ body: { itemId, userId } } = req, res) => {
     try {
-        const classRosterData = await db.roster.findOne({ where: { id: rosterId }, include: [db.user] })
-        classRosterData.addItem(userId)
+        await db.roster.create({ itemId: itemId, userId: userId })
+        const classRosterData = await db.item.findOne({ where: { id: itemId }, include: [db.user] })
         res.json(classRosterData);
     }
 
@@ -98,6 +85,20 @@ router.delete('/delete/:id', async ({ params: { id } } = req, res) => {
     try {
         const classData = await db.item.destroy({ where: { id: id } })
         res.json(classData)
+    }
+
+    catch (err) {
+        console.error(err)
+        res.status(500).end()
+    }
+})
+
+// REMOVE A STUDENT
+router.delete("/removeStudent/:itemId/:userId", async ({ params: { itemId, userId } } = req, res) => {
+    try {
+        await db.roster.destroy({ where: { userId: userId } })
+        const classRosterData = await db.item.findOne({ where: { id: itemId }, include: [db.user] })
+        res.json(classRosterData);
     }
 
     catch (err) {

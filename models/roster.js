@@ -12,18 +12,18 @@ module.exports = function (sequelize, DataTypes) {
 
         // TABLE COLUMNS
         // ===============================================
-        id: {
-            type: DataTypes.UUID,
-            defaultValue: Sequelize.UUIDV4,
-            primaryKey: true,
-            allowNull: false,
-        },
+        // id: {
+        //     type: DataTypes.UUID,
+        //     defaultValue: Sequelize.UUIDV4,
+        //     primaryKey: true,
+        //     allowNull: false,
+        // },
 
-        itemId: {
-            type: DataTypes.UUID,
-            references: db.item,
-            key: 'id'
-        },
+        // itemId: {
+        //     type: DataTypes.UUID,
+        //     references: db.item,
+        //     key: 'id'
+        // },
     },
 
 
@@ -36,10 +36,10 @@ module.exports = function (sequelize, DataTypes) {
 
     // ASSOCIATIONS
     // ===============================================
-    roster.associate = (models) => {
-        roster.belongsTo(models.item, { onDelete: 'cascade' });
-        roster.belongsToMany(models.user, { through: 'roster_content', onDelete: 'cascade' })
-    };
+    // roster.associate = (models) => {
+    //     roster.belongsTo(models.item, { onDelete: 'cascade' });
+    //     roster.belongsToMany(models.user, { through: 'roster_content', onDelete: 'cascade' })
+    // };
 
 
     // RETURN

@@ -41,7 +41,6 @@ router.get("/:id", async ({ params: { id } } = req, res) => {
 router.post("/create", async ({ body } = req, res) => {
     try {
         const classData = await db.item.create(body)
-        // await db.roster.create({ itemId: classData.id })
         const classWithRoster = await db.item.findOne({ where: { id: classData.id }, include: db.user })
         res.json(classWithRoster)
     }

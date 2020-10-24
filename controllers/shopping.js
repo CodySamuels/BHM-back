@@ -42,10 +42,10 @@ router.get("/:id", async ({ params: { id } } = req, res) => {
 })
 
 // ADD ITEMS TO CART
-router.post("/add", async ({ session, body: { cartId, classId } } = req, res) => {
+router.post("/add", async ({ session, body: { cartId, itemId } } = req, res) => {
   try {
     const cartData = await db.cart.findOne({ where: { id: cartId }, include: [db.item] })
-    cartData.addItem(classId)
+    cartData.addItem(itemId)
     session.cart = cartData
     res.json(cartData);
   }
@@ -57,16 +57,12 @@ router.post("/add", async ({ session, body: { cartId, classId } } = req, res) =>
 })
 
 // CHECKOUT ROUTE
-router.post('/create-checkout-session/:id', async (req, res) => {
+router.post('/create-checkout-session/:id', async ({ params: { id } } = req, res) => {
   try {
     const domainURL = process.env.DOMAIN;
-    const cartInfo = await db.cart.findOne({
-      where: {
-        id: req.params.id
-      }, include: [db.item]
-    })
+    const cartInfo = await db.cart.findOne({ where: { id: id }, include: [db.item] })
 
-    let cartObj = {
+    const cartObj = {
       payment_method_types: ['card'],
       line_items: [],
       mode: 'payment',
